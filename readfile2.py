@@ -31,21 +31,19 @@ with open(filename, "r") as csv_file:
 
     # get field names
     # fields = csvreader.next()
-    # A counter that will keep track of which line the program is on
-    line_count=0
 
     # A for loop to traverse the lines in  the CSV file
     for row in csv_reader:
+        print(row[0] + " was in the year " + row[1] + " lived in " +  row[2] + " and graduated with a GPA of " + row[3])
+        #mycursor.executemany('INSERT into %s VALUES(%s, %s, %s, %s, %s)'%students, row)
+        
+        sql = "INSERT INTO students (name, year, dorm,room,GPA)VALUES (%s, %s, %s, %s, %s)"
+        val = (row[0], row[1], row[2], row[3], row[4] )
+        mycursor.execute(sql,val)
+        mydb.commit()
+        
+mycursor.execute("SELECT * FROM students")
+myresult = mycursor.fetchall()
 
-        #Checking to see if the loop is on the first line
-        if line_count==0:
-            print("Column names are : " + row[0]+ row[1] + row[2] + row[3])
-            #'INSERT IGNORE into %s VALUES(%s, %s, %s)'%table_name, sql_data     Name,Year,Dorm,Room,GPA
-            mycurser.executemany('INSERT into %s VALUES(%s, %s, %s, %s, %s)'%students, row)
-
-            #increments the line count
-            line_count += 1
-        else:
-            print(row[0] + " was in the year " + row[1] + " lived in " +  row[2] + " and graduated with a GPA of " + row[3])
-            mycurser.executemany('INSERT into %s VALUES(%s, %s, %s, %s, %s)'%students, row)
-            line_count += 1
+for x in myresult:
+    print(x)
